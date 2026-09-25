@@ -1,0 +1,42 @@
+# Maven build output
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.flattened-pom.xml
+
+# Java
+*.class
+*.log
+
+# Maven Wrapper binaries are downloaded locally
+.mvn/wrapper/maven-wrapper.jar
+
+# IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+.factorypath
+.apt_generated/
+.sts4-cache/
+.springBeans
+.vscode/
+
+# NetBeans
+nbbuild/
+nbdist/
+.nb-gradle/
+nb-configuration.xml
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
