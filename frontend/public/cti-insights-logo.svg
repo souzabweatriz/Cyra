@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-labelledby="title">
+  <title>CTI Insights</title>
+  <rect width="48" height="48" rx="14" fill="#6272f2"/>
+  <path d="M16 17.5c0-1.38 1.12-2.5 2.5-2.5h11c1.38 0 2.5 1.12 2.5 2.5v13c0 1.38-1.12 2.5-2.5 2.5h-11a2.5 2.5 0 0 1-2.5-2.5v-13Z" fill="#f7f8ff"/>
+  <path d="M21 20h6v8h-6z" fill="#a9b1ff"/>
+</svg>
