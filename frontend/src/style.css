@@ -243,3 +243,67 @@ button {
   }
 }
 
+/* A Sidebar ocupa espaço no desktop; em notebooks, a área de dados preserva a leitura. */
+@media (min-width: 761px) and (max-width: 1180px) {
+  #app .app-shell main.page { padding: 34px 26px 60px !important; }
+
+  #app .app-shell main.page .filters {
+    flex-wrap: wrap;
+    align-items: end;
+  }
+
+  #app .app-shell main.page .filters button { margin-left: 0; }
+
+  #app .app-shell main.page .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  #app .app-shell main.page .metrics article:nth-child(2) { border-right: 0; }
+  #app .app-shell main.page .metrics article:nth-child(-n+2) { border-bottom: 1px solid #202938; }
+
+  #app .app-shell main.page .grid,
+  #app .app-shell main.page .content { grid-template-columns: 1fr !important; }
+
+  #app .app-shell main.page .content .panel + .panel { margin-top: 0; }
+
+  #app .app-shell main.page .levels article { grid-template-columns: 110px minmax(0, 1fr) 44px !important; }
+  #app .app-shell main.page .levels article small { display: none; }
+}
+
+@media (max-width: 760px) {
+  #app .app-shell main.page { min-height: calc(100vh - 64px); padding: 28px 16px 48px !important; }
+
+  #app .app-shell main.page h1 { font-size: 31px !important; }
+
+  #app .app-shell main.page .filters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  #app .app-shell main.page .filters label,
+  #app .app-shell main.page .filters select { min-width: 0; width: 100%; }
+
+  #app .app-shell main.page .filters button { grid-column: 1 / -1; margin-left: 0; text-align: left; }
+
+  #app .app-shell main.page .metrics,
+  #app .app-shell main.page .summary,
+  #app .app-shell main.page .grid,
+  #app .app-shell main.page .content { display: block !important; }
+
+  #app .app-shell main.page .metrics article,
+  #app .app-shell main.page .summary article { border-right: 0 !important; border-bottom: 1px solid #202938; }
+
+  #app .app-shell main.page .metrics article:last-child,
+  #app .app-shell main.page .summary article:last-child { border-bottom: 0; }
+
+  #app .app-shell main.page .grid > .panel + .panel,
+  #app .app-shell main.page .content > .panel + .panel { margin-top: 16px; }
+
+  #app .app-shell main.page .levels article { grid-template-columns: 82px minmax(0, 1fr) 38px !important; gap: 8px !important; }
+  #app .app-shell main.page .levels article small { display: none; }
+
+  #app .app-shell main.page .title { align-items: start; }
+  #app .app-shell main.page .title label { display: none; }
+}
+
