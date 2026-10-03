@@ -18,6 +18,10 @@ public class Cliente {
 
     private String segmento;
 
+    @ManyToOne
+    @JoinColumn(name = "consultor_id")
+    private Consultor consultor;
+
     @OneToMany(mappedBy = "cliente")
     private List <Contrato> contratos;
 
@@ -54,6 +58,14 @@ public class Cliente {
 
     public void setSegmento(String segmento) {
         this.segmento = segmento;
+    }
+
+    public Consultor getConsultor() {
+        return consultor;
+    }
+
+    public void setConsultor(Consultor consultor) {
+        this.consultor = consultor;
     }
 
     public List<Contrato> getContratos() {

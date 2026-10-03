@@ -2,7 +2,6 @@ package br.com.cyra.backend.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +13,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "contratos")
+@Table(name = "servicos")
 public class Servico {
 
     @Id
@@ -36,9 +35,6 @@ public class Servico {
     @ManyToOne
     @JoinColumn(name = "servico_id")
     private Servico servico;
-
-    @OneToMany(mappedBy = "contrato")
-    private List<Insight> insights;
 
     public Servico() {
     }
@@ -99,11 +95,4 @@ public class Servico {
         this.servico = servico;
     }
 
-    public List<Insight> getInsights() {
-        return insights;
-    }
-
-    public void setInsights(List<Insight> insights) {
-        this.insights = insights;
-    }
 }
