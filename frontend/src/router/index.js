@@ -7,9 +7,7 @@ import UploadView from '../views/UploadView.vue'
 import RelatoriosView from '../views/RelatoriosView.vue'
 import GraficosView from '../views/GraficosView.vue'
 import AppLayout from '../components/AppLayout.vue'
-import { createPinia } from 'pinia'
-
-const pinia = createPinia()
+import RegisterView from '../views/RegisterView.vue'
 
 const routes = [
 
@@ -26,8 +24,15 @@ const routes = [
   },
 
   {
+    path: '/cadastro',
+    name: 'cadastro',
+    component: RegisterView
+  },
+
+  {
     path: '/dashboard',
     component: AppLayout,
+    meta: { requiresAuth: true },
 
     children: [
 
@@ -67,6 +72,16 @@ const router = createRouter({
 
   routes
 
+})
+
+router.beforeEach((to) => {
+  const token = localStorage.getItem('token')
+  if (to.matched.some((route) => route.meta.requiresAuth) && !token) {
+    return { name: 'login', query: { redirect: to.fullPath } }
+  }
+  if ((to.name === 'login' || to.name === 'cadastro') && token) {
+    return { name: 'dashboard' }
+  }
 })
 
 export default router

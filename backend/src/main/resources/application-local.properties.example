@@ -1,0 +1,6 @@
+# Copie para application-local.properties e preencha com credenciais locais ou do Azure.
+DB_URL=jdbc:postgresql://localhost:5432/cyra
+DB_USER=postgres
+DB_PASSWORD=sua_senha_aqui
+JWT_SECRET=gere_uma_chave_com_no_minimo_32_caracteres
+CORS_ORIGIN=http://localhost:5173

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "axios": "^1.20.0",
     "pinia": "^4.0.3",
     "tailwindcss": "^4.3.3",
     "three": "^0.186.0",
@@ -22,4 +23,3 @@
     "vite": "^8.3.0"
   }
 }
-

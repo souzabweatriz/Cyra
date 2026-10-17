@@ -55,7 +55,7 @@ function sair() {
 
     <div class="border-t border-[#202b40] p-3">
       <div v-if="!collapsed" class="mb-2 border border-[#26334b] bg-[#111a29] p-3">
-        <p class="text-xs font-semibold text-[#d8e1f0]">Usuário:</p>
+        <p class="text-xs font-semibold text-[#d8e1f0]">{{ auth.nomeExibicao }}</p>
       </div>
       <button v-if="!mobileOpen" @click="emit('toggle')" class="flex w-full items-center gap-3 px-3 py-3 text-xs font-bold uppercase tracking-[.1em] text-[#8290a8] transition hover:bg-[#ffffff]/[0.045] hover:text-[#cbd8f4]">
         <svg :class="['h-4 w-4 transition-transform', collapsed ? 'rotate-180' : '']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m15 18-6-6 6-6" /></svg>
