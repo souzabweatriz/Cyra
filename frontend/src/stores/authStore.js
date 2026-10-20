@@ -1,64 +1,47 @@
 import { defineStore } from 'pinia'
+import api from '../services/api'
 
 export const useAuthStore = defineStore('auth', {
-  // STATE
-  // Guarda os dados de autenticação usados pela aplicação.
   state: () => ({
-    logado: localStorage.getItem('cti_logado') === 'true',
-
-    usuario:
-      localStorage.getItem('cti_usuario') || ''
+    token: localStorage.getItem('token') || '',
+    usuario: JSON.parse(localStorage.getItem('cyra_usuario') || 'null'),
+    carregando: false
   }),
 
-  // GETTERS
-  // Calculam informações a partir do state.
   getters: {
-    nomeExibicao: (state) => {
-      return state.usuario || 'Usuário'
-    },
-
-    estaLogado: (state) => {
-      return state.logado
-    }
+    estaLogado: (state) => Boolean(state.token),
+    nomeExibicao: (state) => state.usuario?.nome || 'Usuário'
   },
 
-  // ACTIONS
-  // Executam ações que alteram o state.
   actions: {
-    login(usuario, senha) {
-      // Para a atividade de front-end,
-      // qualquer usuário e senha preenchidos são aceitos.
-      if (!usuario || !senha) {
-        return false
-      }
+    login(email) {
+      // Sprint atual: acesso demonstrativo sem integração ou validação de credenciais.
+      // A autenticação real será reativada quando a API estiver disponível.
+      const nome = email?.trim().split('@')[0] || 'Visitante'
+      this.token = 'acesso-demonstracao'
+      this.usuario = { nome, perfil: 'DEMO', email: email?.trim() || null }
+      localStorage.setItem('token', this.token)
+      localStorage.setItem('cyra_usuario', JSON.stringify(this.usuario))
+      return this.usuario
+    },
 
-      this.logado = true
-      this.usuario = usuario
+    async register(nome, email, senha) {
+      return api.post('/auth/register', { nome, email, senha })
+    },
 
-      localStorage.setItem(
-        'cti_logado',
-        'true'
-      )
-
-      localStorage.setItem(
-        'cti_usuario',
-        usuario
-      )
-
-      return true
+    async carregarPerfil() {
+      if (!this.token) return null
+      const { data } = await api.get('/auth/me')
+      this.usuario = data
+      localStorage.setItem('cyra_usuario', JSON.stringify(data))
+      return data
     },
 
     logout() {
-      this.logado = false
-      this.usuario = ''
-
-      localStorage.removeItem(
-        'cti_logado'
-      )
-
-      localStorage.removeItem(
-        'cti_usuario'
-      )
+      this.token = ''
+      this.usuario = null
+      localStorage.removeItem('token')
+      localStorage.removeItem('cyra_usuario')
     }
   }
 })

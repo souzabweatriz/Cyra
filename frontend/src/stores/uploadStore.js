@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import * as XLSX from 'xlsx'
+import api from '../services/api'
 
 const CAMPOS_OBRIGATORIOS = [
   'codigo_cliente',
@@ -69,7 +70,11 @@ export const useUploadStore = defineStore('upload', {
     dadosTratados: [],
     erros: [],
     carregando: false,
-    processado: false
+    processado: false,
+    importando: false,
+    importacaoConcluida: false,
+    resultadoImportacao: null,
+    erroImportacao: ''
   }),
 
   getters: {
@@ -96,6 +101,17 @@ export const useUploadStore = defineStore('upload', {
       return Object.entries(contagem)
         .map(([tipo, total]) => ({ tipo, total }))
         .sort((a, b) => b.total - a.total || a.tipo.localeCompare(b.tipo))
+    },
+    linhasValidas: (state) => {
+      const linhasInvalidas = new Set(
+        state.erros
+          .filter((erro) => typeof erro.linha === 'number')
+          .map((erro) => erro.linha)
+      )
+
+      return state.dadosTratados.filter((linha, indice) =>
+        !linhasInvalidas.has(state.dadosOriginais[indice]?.numero_linha)
+      )
     },
     clientesNivelA: (state) => state.processado ? state.dadosTratados.filter((cliente) => cliente.nivel_cliente === 'A').length : 475,
     clientesNivelB: (state) => state.processado ? state.dadosTratados.filter((cliente) => cliente.nivel_cliente === 'B').length : 513,
@@ -131,6 +147,9 @@ export const useUploadStore = defineStore('upload', {
       this.dadosTratados = []
       this.erros = []
       this.processado = false
+      this.importacaoConcluida = false
+      this.resultadoImportacao = null
+      this.erroImportacao = ''
     },
 
     validarArquivo() {
@@ -316,6 +335,9 @@ export const useUploadStore = defineStore('upload', {
 
     async processarPlanilha() {
       this.erros = []
+      this.importacaoConcluida = false
+      this.resultadoImportacao = null
+      this.erroImportacao = ''
       if (!this.validarArquivo()) return
 
       this.carregando = true
@@ -369,6 +391,41 @@ export const useUploadStore = defineStore('upload', {
         this.processado = true
       } finally {
         this.carregando = false
+      }
+    },
+
+    async enviarDadosValidos() {
+      this.erroImportacao = ''
+      this.importacaoConcluida = false
+      this.resultadoImportacao = null
+
+      if (!this.linhasValidas.length) {
+        this.erroImportacao = 'Não há registros válidos para enviar ao servidor.'
+        return false
+      }
+
+      const payload = this.linhasValidas.map((linha) => ({
+        codigo: linha.codigo_cliente,
+        nome: linha.nome_cliente,
+        email: linha.email,
+        segmento: linha.segmento,
+        nivel: linha.nivel_cliente,
+        faturamentoAnual: linha.faturamento
+      }))
+
+      this.importando = true
+
+      try {
+        const resposta = await api.post('/api/clientes/importar', payload)
+        this.resultadoImportacao = resposta.data
+        this.importacaoConcluida = true
+        return true
+      } catch (erro) {
+        console.error(erro)
+        this.erroImportacao = erro.response?.data?.mensagem || erro.response?.data?.message || 'Não foi possível enviar os dados ao servidor. Verifique se o Spring Boot está em execução.'
+        return false
+      } finally {
+        this.importando = false
       }
     }
   }

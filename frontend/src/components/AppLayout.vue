@@ -1,10 +1,12 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import Sidebar from './Sidebar.vue'
+import { useAuthStore } from '../stores/authStore'
 
 const sidebarRecolhida = ref(false)
 const larguraJanela = ref(window.innerWidth)
 const menuMobileAberto = ref(false)
+const auth = useAuthStore()
 const sidebarCompacta = computed(() => larguraJanela.value > 760 && (sidebarRecolhida.value || larguraJanela.value <= 1180))
 
 function atualizarLargura() {
@@ -20,7 +22,7 @@ onBeforeUnmount(() => window.removeEventListener('resize', atualizarLargura))
     <Sidebar :collapsed="sidebarCompacta" :mobile-open="menuMobileAberto" @toggle="sidebarRecolhida = !sidebarRecolhida" @close="menuMobileAberto = false" />
     <button v-if="menuMobileAberto" class="mobile-backdrop" aria-label="Fechar menu" @click="menuMobileAberto = false"></button>
     <div :class="['app-content', { compact: sidebarCompacta }]">
-      <header class="appbar"><button class="mobile-menu" aria-label="Abrir navegação" @click="menuMobileAberto = true"><i></i><i></i><i></i></button><p>CYRA / INTELIGÊNCIA DE DADOS</p><div class="account"><span class="avatar">AO</span><span>Ana Oliveira</span></div></header>
+      <header class="appbar"><button class="mobile-menu" aria-label="Abrir navegação" @click="menuMobileAberto = true"><i></i><i></i><i></i></button><p>CYRA / INTELIGÊNCIA DE DADOS</p><div class="account"><span class="avatar">{{ auth.nomeExibicao.slice(0, 2).toUpperCase() }}</span><span>{{ auth.nomeExibicao }}</span></div></header>
       <router-view />
     </div>
   </div>
